@@ -16,8 +16,8 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<!--project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding-->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- property useful for  spotify's dockerfile-maven-plugin -->
 		<!-- Instead of "fanjups", please add your Docker Hub username -->
 		<docker.image.prefix>beo1975</docker.image.prefix>
@@ -98,6 +98,26 @@
 			        </execution>
 			    </executions>
        			</plugin>
+       		<!-- jacoco-maven-plugin useful for Codecov -->
+       		<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.7.201606060606</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- Generating github gh pages & maven project documents  -->
             		<plugin>
             			<groupId>org.apache.maven.plugins</groupId>
@@ -120,6 +140,18 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Useful for Heroku Deployment -->
+			<plugin>
+		      <groupId>com.heroku.sdk</groupId>
+		      <artifactId>heroku-maven-plugin</artifactId>
+		      <version>2.0.11</version>
+		      <configuration>
+		        <appName>cicd-spring-boot-java-app</appName>
+		        <processTypes>
+		          <web>java $JAVA_OPTS -jar -Dserver.port=$PORT ${full-artifact-name}</web>
+		        </processTypes>
+		      </configuration>
+      		</plugin> 
 		</plugins>
 	</build>
 
